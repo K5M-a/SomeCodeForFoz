@@ -22,8 +22,7 @@ int main(int argc, char *argv[])
     
     SearcherBoi.GetTXTPaths(P, ".txt", v);
     
-    SearcherBoi.PrintArgs();
-    SearcherBoi.PrintTXTPaths(v);
+    SearcherBoi.CreateThreads();
     
     
     

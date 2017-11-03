@@ -14,6 +14,7 @@
 #include "boost/filesystem.hpp"
 #include <iterator>
 #include <algorithm>
+#include <pthread.h>
 
 
 using namespace std;
@@ -28,11 +29,11 @@ public:
     string SearchPath;
     int ThreadCount;
     
-    void GetUserArgs(char**);
-    void GetTXTPaths(const path& root, const string& ext, vector<path>& ret);  //Gets and stores full .txt file paths found in a vector - Found online, slightly modified
-    void CreateThreads();
-    void CreateBIGLYQ();
-    void DoMethOnBIGLYQ();
+    void GetUserArgs(char**);                                                   //Gets the user cmd line argumengts and stores them in SearchPath and ThreadCount
+    void GetTXTPaths(const path& root, const string& ext, vector<path>& ret);   //Gets and stores full .txt file paths found in a vector - Found online, slightly modified
+    void CreateThreads();                                                       //Creates threads based on user input
+    void CreateBIGLYQ();                                                        //Should create a huge Q that stores all the Worker threads Maps
+    void DoMethOnBIGLYQ();                                                      //Should sort through all the Maps in the BIGLYQ and show top 10 words
     
     
     /* Debugging Purposes */

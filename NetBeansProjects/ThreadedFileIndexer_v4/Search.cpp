@@ -8,6 +8,11 @@
 #include "Search.h"
 
 
+void* WorkerFunction(void *arg)
+{	
+    cout << "Thread created!" << endl;
+}
+
 void Search::GetUserArgs(char *argv[])
 {
     string cond1 = "-t";
@@ -25,6 +30,7 @@ void Search::GetUserArgs(char *argv[])
     }
 }
 
+
 void Search::GetTXTPaths(const path& root, const string& ext, vector<path>& ret)
 {   
     if(!exists(root) || !is_directory(root)) return;
@@ -37,5 +43,23 @@ void Search::GetTXTPaths(const path& root, const string& ext, vector<path>& ret)
         if(is_regular_file(*it) && it->path().extension() == ext)
 		ret.push_back(it->path());
         ++it;
+    }
+}
+
+
+void Search::CreateThreads()
+{
+ //   pthread_t threads = malloc(sizeof(pthread_t) * ThreadCount); Possibly fixes the many threads crash bug?
+    
+    pthread_t threads[ThreadCount];		//Initialize threads
+    
+    for( int i = 0; i < ThreadCount; i++ )
+    {	
+        int ThreadError = pthread_create(&threads[i], NULL, WorkerFunction, NULL);
+        
+        if(ThreadError)
+	{
+            cout << "Error:unable to create thread," << ThreadError << endl;
+        }
     }
 }
