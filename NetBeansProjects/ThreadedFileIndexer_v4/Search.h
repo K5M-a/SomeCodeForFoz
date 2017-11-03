@@ -8,6 +8,7 @@
 #ifndef SEARCH_H
 #define SEARCH_H
 
+
 #include <iostream>
 #include <string>
 #include "boost/filesystem.hpp"
@@ -18,6 +19,9 @@
 using namespace std;
 using namespace boost::filesystem;
 
+/* Global Variables */
+typedef vector<path> vec;   	//Vector to store txt file paths
+vec v;
 
 
 class Search
@@ -46,7 +50,7 @@ public:
     // Prints the .txt file paths stored in the vector and pops them off
     void PrintTXTPaths()
     {
-  /*      while(v.empty() == 0)
+        while(v.empty() == 0)
         {
             path BoostPath = v.back();					//Takes the filepath from the back of the vector
             v.pop_back();
@@ -57,7 +61,7 @@ public:
         if(v.empty()){
             cout << "Boi we out" << endl;
         }
-        */
+        
     };
     
 };
