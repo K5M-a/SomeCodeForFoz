@@ -8,7 +8,9 @@
 /* My Libraries */
 #include "Search.h"
 
-
+/* Global Variables */
+typedef vector<path> vec;   	//Vector to store txt file paths
+vec v;
 
 int main(int argc, char *argv[])
 {
@@ -21,6 +23,8 @@ int main(int argc, char *argv[])
     SearcherBoi.GetTXTPaths(P, ".txt", v);
     
     SearcherBoi.PrintArgs();
-    SearcherBoi.PrintTXTPaths();
+    SearcherBoi.PrintTXTPaths(v);
+    
+    
     
 }

@@ -19,9 +19,7 @@
 using namespace std;
 using namespace boost::filesystem;
 
-/* Global Variables */
-typedef vector<path> vec;   	//Vector to store txt file paths
-vec v;
+
 
 
 class Search
@@ -48,18 +46,14 @@ public:
     
     
     // Prints the .txt file paths stored in the vector and pops them off
-    void PrintTXTPaths()
+    void PrintTXTPaths(vector<path> vecboost)
     {
-        while(v.empty() == 0)
+        while(vecboost.empty() == 0)
         {
-            path BoostPath = v.back();					//Takes the filepath from the back of the vector
-            v.pop_back();
+            path BoostPath = vecboost.back();					//Takes the filepath from the back of the vector
+            vecboost.pop_back();
             string filepathString = BoostPath.string();
             cout << ".txt file found: " << filepathString << endl;
-        }
-        
-        if(v.empty()){
-            cout << "Boi we out" << endl;
         }
         
     };
