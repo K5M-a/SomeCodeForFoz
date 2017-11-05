@@ -8,6 +8,7 @@
 #ifndef WORKERTHREADS_H
 #define WORKERTHREADS_H
 
+#include <iostream>
 #include <string>
 #include "boost/filesystem.hpp"
 #include <pthread.h>
@@ -18,12 +19,10 @@ using namespace boost::filesystem;
 
 
 class WorkerThread
-{   
-    
+{       
 public:
-    string TXTPath;
     
-    void GetTXTPath(vector<path> TxtVector);
+    void GetTXTPath(string txtpath);                                    //Gets a .txt file path from the Searcher quene if it is not empty  
     
 };
 

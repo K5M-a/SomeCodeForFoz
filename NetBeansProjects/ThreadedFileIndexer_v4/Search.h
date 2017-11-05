@@ -26,16 +26,17 @@ using namespace boost::filesystem;
 class Search
 {   
 public:
-    string SearchPath;
-    int ThreadCount;
-    
-    typedef vector<path> vec;   	//Vector to store txt file paths
-    vec TxtPathVec;
+    string SearchPath;                                                          //Stores user input path
+    int ThreadCount;                                                            //Stores number of Threads to be created
+    pthread_t threads[1000];                                                    //Initialize pthreads
+    vector<string> TXTVec;                                                      //String type vector that stores all .txt file paths
 
     
-    void GetUserArgs(char**);                                                   //Gets the user cmd line argumengts and stores them in SearchPath and ThreadCount
-    void GetTXTPaths(const path& root, const string& ext);                      //Gets and stores full .txt file paths found in a vector
-    void CreateThreads();                                                       //Creates threads based on user input
+    void GetUserArgs(char**);     
+    void GetTXTPaths(const path& root, const string& ext);                      
+    void CreateThreads();
+    string PopOneTXTPath();
+    void WaitForChildren();   
     
     /* Under-construction */
     void CreateBIGLYQ();                                                        //Should create a huge Q that stores all the Worker threads Maps
@@ -43,26 +44,8 @@ public:
     
     
     /* Debugging Purposes */
-    //Prints the user input arguments 
-    void PrintArgs()
-    {
-        cout << "Search path entered is: " << SearchPath << endl;
-        cout << "Threads intended to create: " << ThreadCount << endl;
-    };
-    
-    
-    // Prints the .txt file paths stored in the vector and pops them off
-    void PrintTXTPaths()
-    {
-        while(TxtPathVec.empty() == 0)
-        {
-            path BoostPath = TxtPathVec.back();					//Takes the filepath from the back of the vector
-            TxtPathVec.pop_back();
-            string filepathString = BoostPath.string();
-            cout << ".txt file found: " << filepathString << endl;
-        }
-        
-    };
+    void PrintArgs();
+    void PrintTXTVector();
     
 };
 

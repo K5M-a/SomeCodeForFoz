@@ -7,10 +7,11 @@
 
 
 /* TO DO: */
-// 1- UPDATE SEARCH PRINTTXTPATHS TO NOT POP OFF []
+// 1- UPDATE SEARCH PRINTTXTPATHS TO NOT POP OFF [COMPLETED]
 // 2- ADD WAY TO KEEP TRACK OF UNUSED WORKERS []
-// 3- RESOLVE IWHERE TO PUT WORKERFUNCTION AND MAKE IT WORK PROPERLY []
-// 4- 
+// 3- RESOLVE WHERE TO PUT WORKERFUNCTION AND MAKE IT WORK PROPERLY [COMPLETED]
+// 4- FIX GETTING TXT FILE FROM SEARCHBOI NOT UPDATING SEARCHERBOI IN WORKERTHREAD GETTXTPATH FNC [COMPLETED]
+// 5- 
 // 
 
 
@@ -20,12 +21,27 @@
 
 /* Global Varibles */
 Search SearcherBoi;
+pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;                             //Lock/Unlock Threads
 
 void* WorkerFunction(void *arg)
 {
     WorkerThread WorkerBoi;
     
-    WorkerBoi.GetTXTPath(SearcherBoi.TxtPathVec);
+    pthread_mutex_lock( &mutex1 );                                              //LOCKKKKKKKK
+    if(SearcherBoi.TXTVec.empty() == 1)
+    {
+        cout << "No more .txt files" << endl;
+    }
+    
+    else
+    { 
+        while(SearcherBoi.TXTVec.empty() == 0)
+        {
+            WorkerBoi.GetTXTPath(SearcherBoi.PopOneTXTPath());
+        }
+        pthread_mutex_unlock( &mutex1 );                                            //UNLOCKKKKKKK   
+    }
+    
 }
 
 
@@ -33,15 +49,17 @@ int main(int argc, char *argv[])
 {
 
     
-    SearcherBoi.GetUserArgs(argv);          //Gets user input args
+    SearcherBoi.GetUserArgs(argv);                                              //Gets user input args
     
-    path P(SearcherBoi.SearchPath);         //Converts the user input path to Boost Filesystem path type
+    path P(SearcherBoi.SearchPath);                                             //Converts the user input path to Boost Filesystem path type
     
-    SearcherBoi.GetTXTPaths(P, ".txt");     //Uses Boost Library to get all .txt file and stores their paths in a vector
+    SearcherBoi.GetTXTPaths(P, ".txt");                                         //Uses Boost Library to get all .txt file and stores their paths in a vector
     
-    SearcherBoi.CreateThreads();            //Creates threads based on user input
+    SearcherBoi.CreateThreads();                                                //Creates threads based on user input
     
- //   SearcherBoi.PrintTXTPaths();            //Debugging purposes - Prints all the .txt files found 
+    SearcherBoi.WaitForChildren();
     
+    cout << "Number of .txt files found: " << SearcherBoi.TXTVec.size() << endl;
+    cout << "Threads created: " << SearcherBoi.ThreadCount << endl;
     
 }
