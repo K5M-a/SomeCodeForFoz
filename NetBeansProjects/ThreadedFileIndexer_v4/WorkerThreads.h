@@ -12,18 +12,27 @@
 #include <string>
 #include "boost/filesystem.hpp"
 #include <pthread.h>
-
+#include <fstream>
+#include <map>
 
 using namespace std;
 using namespace boost::filesystem;
 
 
+
 class WorkerThread
 {       
 public:
+    typedef map<string,int> ThreadMap;						//Word and Count Map
+    ThreadMap WorkerMap;
     
-    void GetTXTPath(string txtpath);                                    //Gets a .txt file path from the Searcher quene if it is not empty  
+    void WorkOnTXTFile(string txtpath);
+    void CompletedMap();
     
+    
+    /* Debugging Purposes */
+    void PrintMap();
+
 };
 
 #endif /* WORKERTHREADS_H */

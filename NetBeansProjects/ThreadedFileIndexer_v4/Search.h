@@ -15,6 +15,7 @@
 #include <iterator>
 #include <algorithm>
 #include <pthread.h>
+#include <map>
 
 
 using namespace std;
@@ -23,24 +24,29 @@ using namespace boost::filesystem;
 
 
 
+
 class Search
 {   
 public:
+    int Openedtxtfiles = 0;                                                     //Keeps track of the number of .txt files opened
     string SearchPath;                                                          //Stores user input path
     int ThreadCount;                                                            //Stores number of Threads to be created
     pthread_t threads[1000];                                                    //Initialize pthreads
     vector<string> TXTVec;                                                      //String type vector that stores all .txt file paths
+    
+    
+  //  typedef map<int> FinalMap;						//Word and Count Map
+  //  FinalMap CompletedWorkerMaps;
 
     
     void GetUserArgs(char**);     
     void GetTXTPaths(const path& root, const string& ext);                      
     void CreateThreads();
     string PopOneTXTPath();
-    void WaitForChildren();   
+    void WaitForChildren(); 
     
-    /* Under-construction */
-    void CreateBIGLYQ();                                                        //Should create a huge Q that stores all the Worker threads Maps
-    void DoMethOnBIGLYQ();                                                      //Should sort through all the Maps in the BIGLYQ and show top 10 words
+    void AddCompletedAddress();
+    void CombineMapsAndResult();                                                
     
     
     /* Debugging Purposes */

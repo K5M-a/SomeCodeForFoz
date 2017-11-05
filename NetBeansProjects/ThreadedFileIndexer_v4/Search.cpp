@@ -12,6 +12,8 @@
 #include "Search.h"
 	
 extern void* WorkerFunction(void *arg);
+extern pthread_mutex_t mutex1;
+
 
 
 
@@ -66,6 +68,7 @@ void Search::GetTXTPaths(const path& root, const string& ext)
         string txtlocation = BoostPath.string();
         
         TXTVec.push_back(txtlocation);
+        Openedtxtfiles++;
     }
 }
 
@@ -73,7 +76,7 @@ void Search::GetTXTPaths(const path& root, const string& ext)
 
 
 /***************************************************************************
- * TEST
+ * Pops off one file path from the TXT Vector 
  ***************************************************************************/
 string Search::PopOneTXTPath()
 {
@@ -113,6 +116,43 @@ void Search::WaitForChildren()
     }
 }
 
+
+
+
+/***************************************************************************
+ * TEST
+ ***************************************************************************/
+void Search::AddCompletedAddress()
+{
+//    CompletedWorkerMaps.push_back(Address);
+}
+
+
+
+
+/***************************************************************************
+ * TEST
+ ***************************************************************************/
+void Search::CombineMapsAndResult()
+{
+  /*  typedef map<string,int> FinalMap;						//Word and Count Map
+    FinalMap* BiglyVec = CompletedWorkerMaps.back();
+   
+    
+    vector< pair<string,int> > WorkerMapVector;
+    
+    
+    copy(BiglyVec.begin(), BiglyVec.end(), back_inserter(WorkerMapVector));   //Copies the values from map to vectors 
+
+    int Count = 1;
+    
+    for(int i=0; i<WorkerMapVector.size(); i)                                   //Prints the words, starting with the most used
+    {                                    
+        cout << Count << " - " << WorkerMapVector[i].first << "\t" << WorkerMapVector[i].second << endl;
+        ++i;
+        Count++;
+    } */
+}
 
 
 /***************************************************************************

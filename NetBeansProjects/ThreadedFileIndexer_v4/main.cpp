@@ -11,7 +11,10 @@
 // 2- ADD WAY TO KEEP TRACK OF UNUSED WORKERS []
 // 3- RESOLVE WHERE TO PUT WORKERFUNCTION AND MAKE IT WORK PROPERLY [COMPLETED]
 // 4- FIX GETTING TXT FILE FROM SEARCHBOI NOT UPDATING SEARCHERBOI IN WORKERTHREAD GETTXTPATH FNC [COMPLETED]
-// 5- 
+// 5- CREATE FOUND .TXT FILE COUNTER [COMPLETED]
+// 6- STORE THE ADDRESS OF THE COMPLETED MAP IN THE BIGLYQ []
+// 7- IMPORTANT: MAKE SURE THREAD LOOPS UNTIL THERE ARE NO MORE FILES => FIX LOGIC IN WORKERFUNCTION []
+// 8- 
 // 
 
 
@@ -23,32 +26,38 @@
 Search SearcherBoi;
 pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;                             //Lock/Unlock Threads
 
+
+//vector<uintptr_t> MapPtr;
+
+//    pthread_mutex_lock( &mutex1 );                                              //LOCKKKKKKKK
+//    pthread_mutex_unlock( &mutex1 );                                            //UNLOCKKKKKKK
+
+
 void* WorkerFunction(void *arg)
 {
     WorkerThread WorkerBoi;
+                 
+    /* Locks the current thread to finish this task, because each thread will 
+     * access the Vector that stores the .txt files paths and take only 1 file. 
+     * However, ADD FEATURE HERE */
     
-    pthread_mutex_lock( &mutex1 );                                              //LOCKKKKKKKK
-    if(SearcherBoi.TXTVec.empty() == 1)
+    pthread_mutex_lock( &mutex1 ); 
+    while((SearcherBoi.TXTVec.empty() == 0))
     {
-        cout << "No more .txt files" << endl;
+        string txtpath = SearcherBoi.PopOneTXTPath();
+        pthread_mutex_unlock( &mutex1 );
+        WorkerBoi.WorkOnTXTFile(txtpath);
     }
     
-    else
-    { 
-        while(SearcherBoi.TXTVec.empty() == 0)
-        {
-            WorkerBoi.GetTXTPath(SearcherBoi.PopOneTXTPath());
-        }
-        pthread_mutex_unlock( &mutex1 );                                            //UNLOCKKKKKKK   
+    if((SearcherBoi.TXTVec.empty() == 1))
+    {
+        pthread_mutex_unlock( &mutex1 );
     }
-    
 }
 
 
 int main(int argc, char *argv[])
 {
-
-    
     SearcherBoi.GetUserArgs(argv);                                              //Gets user input args
     
     path P(SearcherBoi.SearchPath);                                             //Converts the user input path to Boost Filesystem path type
@@ -59,7 +68,10 @@ int main(int argc, char *argv[])
     
     SearcherBoi.WaitForChildren();
     
-    cout << "Number of .txt files found: " << SearcherBoi.TXTVec.size() << endl;
+    
+    
+    
+    cout << "Number of .txt files found: " << SearcherBoi.Openedtxtfiles << endl;
     cout << "Threads created: " << SearcherBoi.ThreadCount << endl;
     
 }
