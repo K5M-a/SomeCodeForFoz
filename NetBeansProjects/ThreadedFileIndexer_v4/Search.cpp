@@ -8,10 +8,6 @@
 #include "Search.h"
 
 
-void* WorkerFunction(void *arg)
-{	
-    cout << "Thread created!" << endl;
-}
 
 void Search::GetUserArgs(char *argv[])
 {
@@ -31,7 +27,7 @@ void Search::GetUserArgs(char *argv[])
 }
 
 
-void Search::GetTXTPaths(const path& root, const string& ext, vector<path>& ret)
+void Search::GetTXTPaths(const path& root, const string& ext)
 {   
     if(!exists(root) || !is_directory(root)) return;
 
@@ -41,7 +37,7 @@ void Search::GetTXTPaths(const path& root, const string& ext, vector<path>& ret)
     while(it != endit)
 	{
         if(is_regular_file(*it) && it->path().extension() == ext)
-		ret.push_back(it->path());
+		TxtPathVec.push_back(it->path());
         ++it;
     }
 }
