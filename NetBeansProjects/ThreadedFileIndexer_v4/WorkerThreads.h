@@ -23,6 +23,9 @@ using namespace boost::filesystem;
 class WorkerThread
 {       
 public:
+    int FilesLeft = 1;                                                          //Keeps track if the Quene has files left 
+    int DidWork = 0;                                                            //Keeps track of the Thread if it did process a .txt file or not
+    
     typedef map<string,int> ThreadMap;						//Word and Count Map
     ThreadMap WorkerMap;
     

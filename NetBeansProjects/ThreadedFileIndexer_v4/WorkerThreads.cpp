@@ -15,19 +15,21 @@
  ****************************************************************************/
 void WorkerThread::WorkOnTXTFile(string txtpath)
 {
-    ifstream file;                                                                      //File class
-    file.open(txtpath.c_str());                                                         //Opens file based on txtpath
-	
-    string Word;
-    while (file >> Word)
-    {
-        Word.erase(remove_if(Word.begin(), Word.end (), ::ispunct), Word.end ());	//Removes punctuations from the word
-	
-	Word.erase(remove_if(Word.begin(), Word.end (), ::isdigit), Word.end ());	//Removes any numbers
-	
-	transform(Word.begin(), Word.end(), Word.begin(), ::tolower);			//Transforms the word to lower-case
+    if(txtpath != "NULL"){
+        ifstream file;                                                                      //File class
+        file.open(txtpath.c_str());                                                         //Opens file based on txtpath
 
-	++WorkerMap[Word];
+        string Word;
+        while (file >> Word)
+        {
+            Word.erase(remove_if(Word.begin(), Word.end (), ::ispunct), Word.end ());	//Removes punctuations from the word
+
+            Word.erase(remove_if(Word.begin(), Word.end (), ::isdigit), Word.end ());	//Removes any numbers
+
+            transform(Word.begin(), Word.end(), Word.begin(), ::tolower);			//Transforms the word to lower-case
+
+            ++WorkerMap[Word];
+        }
     }
 }
 
@@ -68,6 +70,7 @@ void WorkerThread::CompletedMap()
  ****************************************************************************/
 void WorkerThread::PrintMap()
 {      
+    if(DidWork == 1){
     vector< pair<string,int> > WorkerMapVector;
     
     copy(WorkerMap.begin(), WorkerMap.end(), back_inserter(WorkerMapVector));   //Copies the values from map to vectors 
@@ -84,4 +87,8 @@ void WorkerThread::PrintMap()
     
     
     cout << "Map Address is: " << &WorkerMap << endl;
+    }
+    else if(DidWork == 0){
+        cout << "This thread did not do shit" << endl;
+    }
 }

@@ -41,18 +41,29 @@ void* WorkerFunction(void *arg)
      * access the Vector that stores the .txt files paths and take only 1 file. 
      * However, ADD FEATURE HERE */
     
-    pthread_mutex_lock( &mutex1 ); 
-    while((SearcherBoi.TXTVec.empty() == 0))
+
+    while((WorkerBoi.FilesLeft == 1))
     {
-        string txtpath = SearcherBoi.PopOneTXTPath();
+        string txtpath = "NULL";
+        pthread_mutex_lock( &mutex1 );
+        if((SearcherBoi.TXTVec.empty() == 0))
+        {
+            txtpath = SearcherBoi.PopOneTXTPath();
+            WorkerBoi.DidWork = 1;
+        }
+        else
+        {
+            WorkerBoi.FilesLeft = 0;
+        }
         pthread_mutex_unlock( &mutex1 );
+        
         WorkerBoi.WorkOnTXTFile(txtpath);
     }
     
-    if((SearcherBoi.TXTVec.empty() == 1))
-    {
-        pthread_mutex_unlock( &mutex1 );
-    }
+    pthread_mutex_lock( &mutex1 );
+    WorkerBoi.PrintMap();
+    pthread_mutex_unlock( &mutex1 );
+    
 }
 
 
