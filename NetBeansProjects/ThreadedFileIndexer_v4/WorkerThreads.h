@@ -26,7 +26,7 @@ public:
     int FilesLeft = 1;                                                          //Keeps track if the queue has files left 
     int DidWork = 0;                                                            //Keeps track of the Thread if it did process a .txt file or not
     
-    typedef map<string,int> ThreadMap;						//Word and Count Map
+    typedef map<string,int> ThreadMap;						//Change? Word and Count Map
     ThreadMap WorkerMap;
     
     void WorkOnTXTFile(string txtpath);

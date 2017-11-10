@@ -31,7 +31,7 @@ public:
     int Openedtxtfiles = 0;                                                     //Keeps track of the number of .txt files opened
     string SearchPath;                                                          //Stores user input path
     int ThreadCount;                                                            //Stores number of Threads to be created
-    pthread_t threads[1000];                                                    //Initialize pthreads
+    pthread_t threads[1000];                                                    //Initialize a limit of 1000 pthreads
     vector<string> TXTVec;                                                      //String type vector that stores all .txt file paths
     
     
