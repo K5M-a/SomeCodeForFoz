@@ -26,7 +26,7 @@ void WorkerThread::WorkOnTXTFile(string txtpath)
 
             Word.erase(remove_if(Word.begin(), Word.end (), ::isdigit), Word.end ());	//Removes any numbers
 
-            transform(Word.begin(), Word.end(), Word.begin(), ::tolower);			//Transforms the word to lower-case
+            transform(Word.begin(), Word.end(), Word.begin(), ::tolower);		//Transforms the word to lower-case
 
             ++WorkerMap[Word];
         }
