@@ -10,6 +10,12 @@ extern void* WorkerFunction(void *arg);
 extern pthread_mutex_t mutex1;
 
 
+/* Returns the greater value in our vector - Found Online, slightly modified */
+struct val_greaterthan : binary_function < pair<string,int>, pair<string,int>, bool >{
+bool operator() (const pair<string,int>& x, const pair<string,int>& y) const{
+return x.second>y.second;}
+}val_gt;
+
 
 
 /***************************************************************************
@@ -131,7 +137,7 @@ void Search::CreateThreads()
 }
 
 /***************************************************************************
-* Waits until all child threads are done proccessing 
+* Waits until all child threads are done processing 
 ****************************************************************************/
 void Search::WaitForChildren()
 {
@@ -145,38 +151,53 @@ void Search::WaitForChildren()
 
 
 /***************************************************************************
- * TEST
+ * Stores all the processed words from a Worker Thread in one big vector
  ***************************************************************************/
-void Search::AddCompletedAddress()
+void Search::StoreCompletedVecs(vector<string>& vec)
 {
-//    CompletedWorkerMaps.push_back(Address);
+    int VecSize = vec.size();                                                   //Gets the size of the Worker word vector
+    for(int i = 0; i < VecSize; i++)                                            //Loops and copies every element  
+    {
+    CompletedWorkerVecs.push_back(vec[i]);
+    vec.pop_back();                                                             //Shrinks our Worker word vector to reduce memory consumption
+    }
 }
 
 
 
 
 /***************************************************************************
- * TEST
+ * Sorts through all the words stored in Searcher's completed vector. 
  ***************************************************************************/
-void Search::CombineMapsAndResult()
+void Search::SortCompletedVecs()
 {
-  /*  typedef map<string,int> FinalMap;						//Word and Count Map
-    FinalMap* BiglyVec = CompletedWorkerMaps.back();
-   
+    typedef map<string,int> SearcherMap;                                        //Creates a map typedef to store both a string and an int
+    SearcherMap WordCount;
     
-    vector< pair<string,int> > WorkerMapVector;
+    int CompSize = CompletedWorkerVecs.size();                                  //Gets the size of our Searcher's completed vector 
     
+    for(int i = 0; i < CompSize; i++)                                           
+    {
+        string Word = CompletedWorkerVecs[i];                                   //Takes one word from Searcher's completed vector
+        CompletedWorkerVecs.pop_back();                                         //Pops one element off => saves memory since we do not need it
+        ++WordCount[Word];                                                      //Stores the word, and if the word already exists it will increment the count of the word
+    }
     
-    copy(BiglyVec.begin(), BiglyVec.end(), back_inserter(WorkerMapVector));   //Copies the values from map to vectors 
-
-    int Count = 1;
+    vector< pair<string,int> > WordsCountV;                                     
+    copy(WordCount.begin(), WordCount.end(), back_inserter(WordsCountV));       //Copies the data from Searcher Map to the newly created WordsCount Vector
+    sort(WordsCountV.begin(), WordsCountV.end(), val_gt);                       //Sorts the words in the vector by the second value instead of key (which is how many times the word was found)
     
-    for(int i=0; i<WorkerMapVector.size(); i)                                   //Prints the words, starting with the most used
+    int TopWords = 1;
+    for(int i=0; i < WordsCountV.size(); i)                                     //Prints the words, starting with the most used
     {                                    
-        cout << Count << " - " << WorkerMapVector[i].first << "\t" << WorkerMapVector[i].second << endl;
-        ++i;
-        Count++;
-    } */
+        while(TopWords <= 50)                                                   //Top words will be displayed up to the number being compared with in this while loop
+        {
+            cout << TopWords << " - " << WordsCountV[i].first << "\t" << WordsCountV[i].second << endl;
+            ++i;
+            TopWords++;
+        }
+	break;
+    }
 }
 
 

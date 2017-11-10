@@ -10,8 +10,8 @@
 
 
 /***************************************************************************
- * Takes in a .txt file path string input and gets the words and the number
- * of times each word was used 
+ * Takes in a .txt file path string input, cleans it and stores each
+ * individual word in a vector to be used later
  ****************************************************************************/
 void WorkerThread::WorkOnTXTFile(string txtpath)
 {
@@ -28,7 +28,7 @@ void WorkerThread::WorkOnTXTFile(string txtpath)
 
             transform(Word.begin(), Word.end(), Word.begin(), ::tolower);		//Transforms the word to lower-case
 
-            ++WorkerMap[Word];
+            WorkerVec.push_back(Word);
         }
     }
 }
@@ -37,58 +37,26 @@ void WorkerThread::WorkOnTXTFile(string txtpath)
 
 
 /***************************************************************************
- * Stores the address of the completed Worker thread map
- ****************************************************************************/
-void WorkerThread::CompletedMap()
-{ 
-
-  
- // for(int i = 0; < i < )
-    
-    /* using memcpy to copy structure: */
- // memcpy ( &BiglyQ, &WorkerMap, sizeof(WorkerMap) );
-  
-    /* BACKUP
-     * 
-     *     
-    ThreadMap* pmap = &WorkerMap;
-    
-    cout << pmap << endl;
-     * 
-     * ////////////////////////
-     * 
-    uintptr_t MapAddress = (uintptr_t)&WorkerMap;
-    return MapAddress;
-     */
-}
-
-
-
-/***************************************************************************
  * DEBUGGING FUNCTION
- * Prints the map of the current thread
+ * Prints the contents of the current Worker thread vector
  ****************************************************************************/
-void WorkerThread::PrintMap()
+void WorkerThread::PrintVec()
 {      
-    if(DidWork == 1){
-    vector< pair<string,int> > WorkerMapVector;
+    if(DidWork == 1)
+    {
+        int Count = 1;
+
+        for(int i=0; i<WorkerVec.size(); i)                                   //Prints the words, starting with the most used
+        {                                    
+            cout << Count << " - " << WorkerVec[i] << endl;
+            ++i;
+            Count++;
+        }
     
-    copy(WorkerMap.begin(), WorkerMap.end(), back_inserter(WorkerMapVector));   //Copies the values from map to vectors 
- //   sort(WorkerMap.begin(), WorkerMap.end(), val_gt);                           //Sorts the words in the vector by the second value instead of key
-	
-    int Count = 1;
-    
-    for(int i=0; i<WorkerMapVector.size(); i)                                   //Prints the words, starting with the most used
-    {                                    
-        cout << Count << " - " << WorkerMapVector[i].first << "\t" << WorkerMapVector[i].second << endl;
-        ++i;
-        Count++;
     }
     
-    
-    cout << "Map Address is: " << &WorkerMap << endl;
-    }
-    else if(DidWork == 0){
+    else if(DidWork == 0)
+    {
         cout << "This thread did not do shit" << endl;
     }
 }

@@ -33,10 +33,8 @@ public:
     int ThreadCount;                                                            //Stores number of Threads to be created
     pthread_t threads[1000];                                                    //Initialize a limit of 1000 pthreads
     vector<string> TXTVec;                                                      //String type vector that stores all .txt file paths
-    
-    
-  //  typedef map<int> FinalMap;						//Word and Count Map
-  //  FinalMap CompletedWorkerMaps;
+    vector<string> CompletedWorkerVecs;                                         //Stores all the data from every Worker word vector
+    int UnusedWorkers = 0;                                                      //Keeps track of unused Worker Threads
 
     
     void GetUserArgs(char**);     
@@ -44,9 +42,8 @@ public:
     void CreateThreads();
     string PopOneTXTPath();
     void WaitForChildren(); 
-    
-    void AddCompletedAddress();
-    void CombineMapsAndResult();                                                
+    void StoreCompletedVecs(vector<string>& vec);
+    void SortCompletedVecs();                                              
     
     
     /* Debugging Purposes */
