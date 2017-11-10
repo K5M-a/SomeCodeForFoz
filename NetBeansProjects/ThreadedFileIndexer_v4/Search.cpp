@@ -4,11 +4,6 @@
  * 
  * Created on November 1, 2017, 10:12 PM
  */
-
-/***************************************************************************
-* GENERIC DESCRIPTION 
-****************************************************************************/
-
 #include "Search.h"
 	
 extern void* WorkerFunction(void *arg);
@@ -23,15 +18,39 @@ extern pthread_mutex_t mutex1;
  ***************************************************************************/
 void Search::GetUserArgs(char *argv[])
 {
+    string cond0 = "-help";
     string cond1 = "-t";
     
-    if(argv[1] == cond1)
+    
+    if(argv[1] == cond0)                                                      
+    {
+        cout << "*******************************" << endl;
+        cout << "*                             *" << endl;
+        cout << "*    Threaded File Indexer    *" << endl;
+        cout << "*     by Khalid AlAwadhi      *" << endl;
+        cout << "*                             *" << endl;
+        cout << "*******************************" << endl << endl;
+        
+        cout << "How to use: " << endl;
+        cout << "1) $ /filepath\t <= will create 3 threads by default and search for .txt files in the specified location in addition to any sub-directories" << endl;
+        cout << "2) $ -t 8 /filepath\t <= '-t' lets the program know that the user will input the number of threads they want to create, and the following number is how many threads to create followed by the path to start searching for .txt files." << endl;
+        exit(1);
+    }
+    
+    
+    
+    if(argv[1] == cond1)                                                        //if the user inputs "-t"
     {
         ThreadCount = atoi(argv[2]);
+        if(ThreadCount > 1000)
+        {
+            cout << "ERROR: Max number of threads exceeded, limit of threads is 1000" << endl;
+            exit(1);
+        }
         SearchPath = argv[3];
     }
     
-    else
+    else                                                                        //else the program will use 3 as the number of threads to create
     {
         ThreadCount = 3;
         SearchPath = argv[1];
@@ -46,10 +65,16 @@ void Search::GetUserArgs(char *argv[])
  ***************************************************************************/
 void Search::GetTXTPaths(const path& root, const string& ext)
 {   
+    /* These lines of code handle fining the .txt files and storing them in a
+     * path type vector */
     typedef vector<path> vec;                                                   //Path type Vector to store txt file paths
     vec PathVec;
     
-    if(!exists(root) || !is_directory(root)) return;
+    if(!exists(root) || !is_directory(root))
+    { 
+        cout<<"ERROR! Expected file path. Type in '-help' to learn how to use this program" << endl; 
+        exit(1);
+    }
 
     recursive_directory_iterator it(root);
     recursive_directory_iterator endit;
@@ -61,14 +86,15 @@ void Search::GetTXTPaths(const path& root, const string& ext)
         ++it;
     }
     
+    /* These lines convert the path type vector to a string type vector */
     while(PathVec.empty() == 0)
     {
         path BoostPath = PathVec.back();					//Takes the filepath from the back of the vector
-        PathVec.pop_back();
-        string txtlocation = BoostPath.string();
+        PathVec.pop_back();                                                     //Dec vector by 1
+        string txtlocation = BoostPath.string();                                //COnverts Boost path type to a string 
         
-        TXTVec.push_back(txtlocation);
-        Openedtxtfiles++;
+        TXTVec.push_back(txtlocation);                                          //Pushes it to TXTVec 
+        Openedtxtfiles++;                                                       //Keeps track of how many .txt files were found 
     }
 }
 
@@ -88,11 +114,10 @@ string Search::PopOneTXTPath()
 
 
 /***************************************************************************
- * Creates threads based on user input 
+ * Creates threads based on user input or default number
  ***************************************************************************/
 void Search::CreateThreads()
 {
- //   pthread_t threads = malloc(sizeof(pthread_t) * ThreadCount); Possibly fixes the many threads crash bug?
     
     for( int i = 0; i < ThreadCount; i++ )
     {	
