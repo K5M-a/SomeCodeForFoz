@@ -26,8 +26,9 @@ void Search::GetUserArgs(char *argv[])
 {
     string cond0 = "-help";
     string cond1 = "-t";
+    string cond2 = "-top";
     
-    
+
     if(argv[1] == cond0)                                                      
     {
         cout << "*******************************" << endl;
@@ -38,29 +39,64 @@ void Search::GetUserArgs(char *argv[])
         cout << "*******************************" << endl << endl;
         
         cout << "How to use: " << endl;
-        cout << "1) $ /filepath\t <= will create 3 threads by default and search for .txt files in the specified location in addition to any sub-directories" << endl;
-        cout << "2) $ -t 8 /filepath\t <= '-t' lets the program know that the user will input the number of threads they want to create, and the following number is how many threads to create followed by the path to start searching for .txt files." << endl;
+        cout << "1) $ /filepath:" << endl;
+        cout << "The above will create 3 threads by default and search for .txt files in the specified location in addition to any sub-directories. It will also display the top 10 most used words." << endl << endl;;
+        cout << "2) $ -t 8 /filepath:" << endl;
+        cout << "The'-t' lets the program know that the user will input the number of threads they want to create, and the following number is how many threads to create followed by the path to start searching for .txt files." << endl << endl;
+        cout << "3) $ -t 8 /filepath -top 12:" << endl;
+        cout << "The '-top' argument allows the user to specify the number of most used words to display, it MUST be followed by a number or an error will appear." << endl;
         exit(1);
     }
     
-    
-    
-    if(argv[1] == cond1)                                                        //if the user inputs "-t"
+    if(argv[1] != NULL & argv[2] == NULL)                                       //If the user only enters a path with no other args
     {
-        ThreadCount = atoi(argv[2]);
-        if(ThreadCount > 1000)
+        ThreadCount = 3;                                                        //Default number of Threads to create is set to 3
+        SearchPath = argv[1];                                                   //First arg is expected to be path to search
+        Top = 10;                                                               //Default number of top words to display is set to 10
+        return;
+    }
+ 
+    
+    if(argv[1] == cond1 & argv[4] == NULL)                                      //if the user inputs "-t" without "-top" 
+    {
+        SearchPath = argv[3];                                                   //Takes in the third arg as path to search
+        
+        ThreadCount = atoi(argv[2]);                                            //Converts the number of threads from char to int
+        
+        Top = 10;                                                               //Converts from char to int
+        
+        if(ThreadCount > 1000)                                                  //Handles error
         {
             cout << "ERROR: Max number of threads exceeded, limit of threads is 1000" << endl;
             exit(1);
         }
-        SearchPath = argv[3];
+        return;
     }
     
-    else                                                                        //else the program will use 3 as the number of threads to create
+    
+    if(argv[1] == cond1 & argv[4] == cond2 &  argv[5] == NULL)                   //if the user inputs "-t" and "-top" without a number
     {
-        ThreadCount = 3;
-        SearchPath = argv[1];
+        cout << "ERROR: Must enter a number of after '-top'" << endl;
+        exit(1);
     }
+    
+    
+    if(argv[1] == cond1 & argv[4] == cond2 & argv[5] != NULL)                   //if the user inputs "-t" with "-top" and a number
+    {
+        SearchPath = argv[3];                                                   //Takes in the third arg as path to search
+        
+        ThreadCount = atoi(argv[2]);                                            //Converts the number of threads from char to int
+        
+        Top = atoi(argv[5]);                                                    //Converts from char to int
+        
+        if(ThreadCount > 1000)                                                  //Handles error
+        {
+            cout << "ERROR: Max number of threads exceeded, limit of threads is 1000" << endl;
+            exit(1);
+        }
+        return;
+    }
+    
 }
 
 
@@ -190,7 +226,7 @@ void Search::SortCompletedVecs()
     int TopWords = 1;
     for(int i=0; i < WordsCountV.size(); i)                                     //Prints the words, starting with the most used
     {                                    
-        while(TopWords <= 50)                                                   //Top words will be displayed up to the number being compared with in this while loop
+        while(TopWords <= Top)                                                   //Top words will be displayed up to the number being compared with in this while loop
         {
             cout << TopWords << " - " << WordsCountV[i].first << "\t" << WordsCountV[i].second << endl;
             ++i;
@@ -209,6 +245,7 @@ void Search::PrintArgs()
 {
         cout << "Search path entered is: " << SearchPath << endl;
         cout << "Threads intended to create: " << ThreadCount << endl;
+        cout << "Top words to display: " << Top << endl;
 };
 
 

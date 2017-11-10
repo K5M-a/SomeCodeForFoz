@@ -31,6 +31,7 @@ public:
     int Openedtxtfiles = 0;                                                     //Keeps track of the number of .txt files opened
     string SearchPath;                                                          //Stores user input path
     int ThreadCount;                                                            //Stores number of Threads to be created
+    int Top = 10;                                                               //Stores top how many words to display (Default is top 10 words)
     pthread_t threads[1000];                                                    //Initialize a limit of 1000 pthreads
     vector<string> TXTVec;                                                      //String type vector that stores all .txt file paths
     vector<string> CompletedWorkerVecs;                                         //Stores all the data from every Worker word vector

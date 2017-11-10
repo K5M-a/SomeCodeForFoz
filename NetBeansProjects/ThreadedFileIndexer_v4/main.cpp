@@ -18,15 +18,16 @@
  *   will be freed. Then the worker will UNLOCK and disappear. 
  * 
  * - I was going to create a Worker class deconstructor, however, I free most of the memory when I take the data from 
- *   the Worker and move it to teh Searcher. Hence there is barely anything to delete aside from a few ints.
+ *   the Worker and move it to the Searcher. Hence there is barely anything to delete aside from a few ints.
  * 
- * - Added '-help' command
+ * - Added '-help' and '-top' commands
  * 
- * - FIXED THE BUG CAUSING THE PROGRAM TO CRASH IF THE USER INPUTS TOO MANY THREADS TO CREATE!!
+ * - FIXED THE BUG CAUSING THE PROGRAM TO CRASH IF THE USER INPUTS TOO MANY THREADS TO CREATE!!!!
  * 
  * - Put some error handlers in place
  *      1) limit thread amount creation ( >1000 )
- *      2) if the user enters an unexpected input, the program will notify user
+ *      2) if the user enters an unexpected input path, the program will notify user
+ *      3) if the user inputs '-top' without a number after an error will show up
  * 
  * - Used Git
  * 
